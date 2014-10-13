@@ -254,12 +254,24 @@ Execute arbitrary shell commands on the node. This endpoint is only accessible i
 
 **Endpoint** 
 
-`GET /shell`
+`POST /shell`
 
 **URI Parameters**
 
-* `exec`: Specify the command to be executed on the node
+* `exec`: Specify the command to be executed on the node - EITHER this or the JSON body should be passed in. 
 * `token`: Mandatory authentication token
+
+**Request**
+
+JSON body with list of commands, ex:
+
+```json
+{
+    "commands": [
+        "chmod a+x /home/whatever"
+    ]
+}
+```
 
 **Response**
 
