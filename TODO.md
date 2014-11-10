@@ -1,0 +1,2 @@
+- set token when writing upstart config or write sshttp config file and read that when starting
+- add an "upstart" endpoint that will write an upstart config file, turn off http, start sshttp using upstart (should check that it worked and is alive before exiting itself)
