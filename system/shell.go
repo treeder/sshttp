@@ -19,7 +19,7 @@ func Shell(s string) ShellStruct {
 	go func() {
 		out, err := exec.Command("/bin/sh", "-c", s).CombinedOutput()
 		if err != nil {
-			c1 <- err.Error()
+			c1 <- "Error Executing Command: " + err.Error() + "\n" + string(out)
 		} else {
 			c1 <- string(out)
 		}

@@ -104,7 +104,7 @@ All responses are in JSON, with Content-Type of `application/json`. A response i
 
 Overview of all available resources
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system`
 
@@ -143,7 +143,7 @@ Overview of all available resources
 
 System hostname
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system/host`
 
@@ -155,7 +155,7 @@ System hostname
 
 Used, free, and total disk space available for a given device or path. If no `disk` parameter is provided, the endpoint assumes the `/` path.
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system/disk`
 
@@ -205,7 +205,7 @@ Provide info about running processes (cpu,mem,user,pid,pname)
 
 From `/etc/cpuinfo`
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system/cpuinfo`
 
@@ -221,7 +221,7 @@ Response:
 
 Load averages for the node
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system/load`
 
@@ -237,7 +237,7 @@ Response:
 
 RAM usage for the node
 
-**Endpoint** 
+**Endpoint**
 
 `GET /system/ram`
 
@@ -252,13 +252,13 @@ Response:
 
 Execute arbitrary shell commands on the node. This endpoint is only accessible if a token was specified at runtime(take in account that any command will timeout after 60 seconds)
 
-**Endpoint** 
+**Endpoint**
 
 `POST /shell`
 
 **URI Parameters**
 
-* `exec`: Specify the command to be executed on the node - EITHER this or the JSON body should be passed in. 
+* `exec`: Specify the command to be executed on the node - EITHER this or the JSON body should be passed in.
 * `token`: Mandatory authentication token
 
 **Request**
