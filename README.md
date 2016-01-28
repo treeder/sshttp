@@ -3,6 +3,14 @@ sshttp
 
 sshttp provides a REST/HTTP API for interacting with a computer, sorta SSH over HTTP. sshttp is written in [the Go Programming Language](http://golang.org/).
 
+## Quick Start
+
+```sh
+docker run --rm -p 8022:8022 treeder/sshttp -t SECRET_TOKEN
+```
+
+TODO: Change token input to an env var. 
+
 ## Authentication
 
 sshttp currently uses a very simple method for authenticating API requests. The daemon may be configured to require authentication at runtime using the `-t` switch. This token may be any arbitrary string at the time of this writing.
