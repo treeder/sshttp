@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"github.com/bmizerany/pat"
+	"github.com/spf13/viper"
 	"github.com/treeder/sshttp/system"
 	"gopkg.in/inconshreveable/log15.v2"
 	"io"
@@ -17,43 +18,61 @@ const VERSION = "0.1"
 func main() {
 	Log := log15.New("svc", "sshttp", "v", VERSION)
 
+	viper.AutomaticEnv()
+	viper.SetDefault("verbosity", "info")
+	viper.SetDefault("port", 8022)
+	viper.SetDefault("ssl", false)
+
 	var (
 		verbosity = flag.String("v", "info", "Verbosity (options: debug, info, warn, error, crit)")
-		port      = flag.Uint64("p", 8022, "Port to expose HTTP service")
+		port      = flag.Int("p", 8022, "Port to expose HTTP service")
 		ssl       = flag.Bool("ssl", false, "Enable TLS")
 		token     = flag.String("t", "", "Auth token to require in HTTP requests")
 	)
 
 	flag.Parse()
 
-	lvl, err := log15.LvlFromString(*verbosity)
+	if *verbosity != "" {
+		viper.Set("verbosity", verbosity)
+	}
+	if *port != 0 {
+		viper.Set("port", port)
+	}
+	if *ssl {
+		viper.Set("ssl", ssl)
+	}
+	if *token != "" {
+		viper.Set("token", token)
+	}
+
+	lvl, err := log15.LvlFromString(viper.GetString("verbosity"))
 	if err != nil {
 		Log.Error("Invalid verbosity selected (-v <verbosity>)")
 		os.Exit(1)
 	}
-	Log.Info("Verbosity level is " + *verbosity)
+	Log.Info("Verbosity level is " + viper.GetString("verbosity"))
 	Log.SetHandler(log15.LvlFilterHandler(lvl, log15.StdoutHandler))
 
-	if *token != "" {
-		SetToken(*token)
+	if viper.GetString("token") != "" {
+		SetToken(viper.GetString("token"))
 	} else {
 		Log.Error("Token argument must be provided (-t <token>)")
 		os.Exit(1)
 	}
 
-	Log.Info("Starting sshttp on port", port)
+	Log.Info("Starting sshttp on port", viper.GetInt("port"))
 
 	Log.Debug("Configuration", log15.Ctx{
-		"port":  *port,
-		"ssl":   *ssl,
-		"token": *token,
+		"port":  viper.GetInt("port"),
+		"ssl":   viper.GetBool("ssl"),
+		"token": viper.GetString("token"),
 	})
 
 	buildServer(Log)
 
-	portStr := ":" + strconv.FormatUint(*port, 10)
+	portStr := ":" + strconv.Itoa(viper.GetInt("port"))
 
-	if *ssl {
+	if viper.GetBool("ssl") {
 		Log.Debug("Serving on https://localhost" + portStr)
 		err := http.ListenAndServeTLS(portStr, "cert.pem", "key.pem", nil)
 		if err != nil {
